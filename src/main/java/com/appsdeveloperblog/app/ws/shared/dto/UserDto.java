@@ -1,16 +1,16 @@
-package com.appsdeveloperblog.app.ws.io.entity;
+package com.appsdeveloperblog.app.ws.shared.dto;
 
 import java.io.Serializable;
 
-public class UserEntity implements Serializable {
+public class UserDto implements Serializable {
 
-    private static final long serialVersionUID = 5313493413859894403L;
-
+    private static final long serialVersionUID = 6835192601898364280L;
     private long id;
     private String userId;
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
     private String encryptedPassword;
     private String emailVerificationToken;
     private Boolean emailVerificationStatus = false;
@@ -53,6 +53,14 @@ public class UserEntity implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getEncryptedPassword() {
