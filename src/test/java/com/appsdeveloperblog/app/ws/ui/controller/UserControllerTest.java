@@ -35,11 +35,12 @@ class UserControllerTest {
     public void createUser() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders
                 .post("/users")
-                .accept(MediaType.ALL);
+                .content("{firstName: Rafael, lastName: Lima, email:contadenub@gmail.com,password: rafael123}")
+                .accept(MediaType.APPLICATION_JSON);
 
         MvcResult result = mockMvc.perform(request)
                 .andExpect(status().isOk())
-                .andExpect(content().string("create user was called"))
+                .andExpect(content().string("{firstName: Rafael, lastName: Lima, email:contadenub@gmail.com}"))
                 .andReturn();
     }
 
