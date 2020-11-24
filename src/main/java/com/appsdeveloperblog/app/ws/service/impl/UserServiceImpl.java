@@ -5,7 +5,6 @@ import com.appsdeveloperblog.app.ws.io.repository.UserRepository;
 import com.appsdeveloperblog.app.ws.service.UserService;
 import com.appsdeveloperblog.app.ws.shared.Utils;
 import com.appsdeveloperblog.app.ws.shared.dto.UserDto;
-import com.appsdeveloperblog.app.ws.ui.model.response.UserRest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -59,12 +58,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserRest getUserById(String userId) {
+    public UserDto getUserById(String userId) {
         UserEntity userEntity = userRepository.findByUserId(userId);
 
         if (userEntity == null) throw new UsernameNotFoundException(userId);
 
-        UserRest returnValue = new UserRest();
+        UserDto returnValue = new UserDto();
         BeanUtils.copyProperties(userEntity, returnValue);
 
         return returnValue;
