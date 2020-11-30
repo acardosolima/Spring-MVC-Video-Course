@@ -3,6 +3,8 @@ package com.appsdeveloperblog.app.ws.service;
 import com.appsdeveloperblog.app.ws.shared.dto.UserDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
+
 public interface UserService extends UserDetailsService {
 
     UserDto createUser(UserDto user);
@@ -10,4 +12,10 @@ public interface UserService extends UserDetailsService {
     UserDto getUser(String email);
 
     UserDto getUserById(String userId);
+
+    UserDto updateUser(String id, UserDto userDto);
+
+    UserDto deleteUser(String id);
+
+    List<UserDto> getUsers(int page, int limit);
 }
