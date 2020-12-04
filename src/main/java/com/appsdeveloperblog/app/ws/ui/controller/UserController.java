@@ -6,7 +6,7 @@ import com.appsdeveloperblog.app.ws.shared.dto.UserDto;
 import com.appsdeveloperblog.app.ws.ui.model.request.UserDetailsRequestModel;
 import com.appsdeveloperblog.app.ws.ui.model.response.ErrorMessages;
 import com.appsdeveloperblog.app.ws.ui.model.response.UserRest;
-import org.springframework.beans.BeanUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +27,10 @@ public class UserController {
                     MediaType.APPLICATION_JSON_VALUE})
     public UserRest getUser(@PathVariable String id) {
 
-        UserRest returnValue = new UserRest();
         UserDto userRest = userService.getUserById(id);
 
-        BeanUtils.copyProperties(userRest, returnValue);
+        ModelMapper modelMapper = new ModelMapper();
+        UserRest returnValue = modelMapper.map(userRest, UserRest.class);
 
         return returnValue;
     }
@@ -40,16 +40,14 @@ public class UserController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
 
-        UserRest returnValue = new UserRest();
-
-        if (userDetails.getFirstName().isEmpty())
+        if (userDetails.getEmail().isEmpty())
             throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
 
-        UserDto userDto = new UserDto();
-        BeanUtils.copyProperties(userDetails, userDto);
+        ModelMapper modelMapper = new ModelMapper();
+        UserDto userDto = modelMapper.map(userDetails, UserDto.class);
 
         UserDto createdUser = userService.createUser(userDto);
-        BeanUtils.copyProperties(createdUser, returnValue);
+        UserRest returnValue = modelMapper.map(createdUser, UserRest.class);
 
         return returnValue;
     }
@@ -61,16 +59,14 @@ public class UserController {
     )
     public UserRest updateUser(@PathVariable String id, @RequestBody UserDetailsRequestModel userDetails) {
 
-        UserRest returnValue = new UserRest();
-
         if (userDetails.getFirstName().isEmpty())
             throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
 
-        UserDto userDto = new UserDto();
-        BeanUtils.copyProperties(userDetails, userDto);
+        ModelMapper modelMapper = new ModelMapper();
+        UserDto userDto = modelMapper.map(userDetails, UserDto.class);
 
         UserDto updatedUser = userService.updateUser(id, userDto);
-        BeanUtils.copyProperties(updatedUser, returnValue);
+        UserRest returnValue = modelMapper.map(updatedUser, UserRest.class);
 
         return returnValue;
     }
@@ -78,10 +74,10 @@ public class UserController {
     @DeleteMapping(value = "/{id}")
     public UserRest deleteUser(@PathVariable String id) {
 
-        UserRest returnValue = new UserRest();
         UserDto userRest = userService.deleteUser(id);
 
-        BeanUtils.copyProperties(userRest, returnValue);
+        ModelMapper modelMapper = new ModelMapper();
+        UserRest returnValue = modelMapper.map(userRest, UserRest.class);
 
         return returnValue;
     }
@@ -94,9 +90,10 @@ public class UserController {
 
         List<UserDto> users = userService.getUsers(page, limit);
 
+        ModelMapper modelMapper = new ModelMapper();
+
         for (UserDto userDto : users) {
-            UserRest userModel = new UserRest();
-            BeanUtils.copyProperties(userDto, userModel);
+            UserRest userModel = modelMapper.map(userDto, UserRest.class);
             returnValue.add(userModel);
         }
 
